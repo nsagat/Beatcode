@@ -1,20 +1,21 @@
 <script>
+  import { goto } from '$app/navigation';
+  export let data;
+  console.log(data);
+  
   let rooms = [
     { name: "AlgoCrushers", members: 5 },
     { name: "NightCoders", members: 3 },
   ];
 
-  let dailyChallenge = {
-    title: "Two Sum",
-    difficulty: "Easy",
-    link: "https://leetcode.com/problems/two-sum/",
-  };
+  let roomCode = '1';
+  
+  function joinRoom() {
+    if (roomCode.trim()) {
+      goto(`/room/${roomCode.trim().toUpperCase()}`);
+    }
+  }  
 
-  let leaderboard = [
-    { name: "you", solved: 102 },
-    { name: "friend1", solved: 89 },
-    { name: "friend2", solved: 65 },
-  ];
 </script>
 
 <div class="min-h-screen bg-gray-50 flex flex-col items-center py-10 px-4">
@@ -30,7 +31,7 @@
       <button class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg">
         Create Room
       </button>
-      <button class="bg-white border border-indigo-600 text-indigo-600 px-6 py-2 rounded-lg">
+      <button onclick={joinRoom} class="bg-white border border-indigo-600 text-indigo-600 px-6 py-2 rounded-lg">
         Join Room
       </button>
     </div>
@@ -58,31 +59,46 @@
       </div>
       <div class="p-4 flex justify-between items-center">
         <div>
-          <p class="text-lg font-semibold">{dailyChallenge.title}</p>
-          <p class="text-sm text-gray-500">{dailyChallenge.difficulty}</p>
+          <p class="text-lg font-semibold">{data.dailyChallenge.question.title}</p>
+          <p class="text-sm text-gray-500">{data.dailyChallenge.question.difficulty}</p>
         </div>
-        <a href={dailyChallenge.link} target="_blank" class="text-indigo-600 hover:underline">
+        <a href={"https://leetcode.com" + data.dailyChallenge.link} target="_blank" class="text-indigo-600 hover:underline">
           View on LeetCode →
         </a>
       </div>
     </div>
 
-    <!-- Leaderboard Highlights -->
-    <div class="bg-white rounded-lg shadow-md overflow-hidden">
-      <div class="p-4 border-b">
-        <h2 class="text-lg font-semibold">🏆 Leaderboard Highlights</h2>
-      </div>
-      <div class="p-4 space-y-2">
-        {#each leaderboard as user, i}
-          <div class="flex justify-between items-center border-b pb-2 text-gray-700">
-            <span>
-              {#if i === 0}🥇{/if} {#if i === 1}🥈{/if} {#if i === 2}🥉{/if} {user.name}
-            </span>
-            <span>{user.solved} solved</span>
-          </div>
-        {/each}
-      </div>
+<!-- Leaderboard Highlights -->
+<div class="bg-white rounded-lg shadow-md overflow-hidden">
+  <div class="p-4 border-b">
+    <h2 class="text-lg font-semibold">🏆 Your Highlights</h2>
+  </div>
+  <div class="p-4 space-y-3">
+
+    <!-- Username -->
+    <div class="flex items-center gap-2">
+      <span class="font-medium text-gray-800">Username:</span>
+      <span class="text-gray-600">{data.userProfile.username}</span>
     </div>
 
-  </main>
+    <!-- Total Solutions -->
+    <div class="flex items-center gap-2">
+      <span class="font-medium text-gray-800">Solutions Completed:</span>
+      <span class="text-gray-600">{data.userProfile.profile.solutionCount}</span>
+    </div>
+
+    <!-- Optional: Add more stats -->
+    <div class="flex items-center gap-2">
+      <span class="font-medium text-gray-800">Ranking:</span>
+      <span class="text-gray-600">{data.userProfile.profile.ranking || 'N/A'}</span>
+    </div>
+
+  </div>
 </div>
+
+
+ </main>
+</div>
+
+
+
