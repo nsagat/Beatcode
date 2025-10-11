@@ -1,5 +1,5 @@
 <script>
-
+  import { goto } from '$app/navigation';
   export let data;
   console.log(data);
   
@@ -7,6 +7,14 @@
     { name: "AlgoCrushers", members: 5 },
     { name: "NightCoders", members: 3 },
   ];
+
+  let roomCode = '1';
+  
+  function joinRoom() {
+    if (roomCode.trim()) {
+      goto(`/room/${roomCode.trim().toUpperCase()}`);
+    }
+  }  
 
 </script>
 
@@ -23,7 +31,7 @@
       <button class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg">
         Create Room
       </button>
-      <button class="bg-white border border-indigo-600 text-indigo-600 px-6 py-2 rounded-lg">
+      <button onclick={joinRoom} class="bg-white border border-indigo-600 text-indigo-600 px-6 py-2 rounded-lg">
         Join Room
       </button>
     </div>
