@@ -1,71 +1,86 @@
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+-- prefering pgcrypto for UUID generation bc supabase
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
-CREATE TABLE IF NOT EXISTS users(
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    username TEXT UNIQUE NOT NULL,
-    email TEXT UNIQUE NOT NULL,
-    password_hash TEXT NOT NULL,
-    leetcode_id TEXT,
-
+-- USERS
+CREATE TABLE IF NOT EXISTS users (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  username TEXT UNIQUE NOT NULL,
+  email TEXT UNIQUE NOT NULL,
+  password_hash TEXT NOT NULL,
+  leetcode_id TEXT
 );
-CREATE TABLE rooms (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+
+-- ROOMS
+CREATE TABLE IF NOT EXISTS rooms (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name TEXT NOT NULL,
   code TEXT UNIQUE NOT NULL,
-  created_by UUID REFERENCES users(id) ON DELETE CASCADE,
+  created_by UUID REFERENCES users(id) ON DELETE CASCADE
 );
--- Room members junction table (many-to-many relationship)
-CREATE TABLE room_members (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+
+-- ROOM MEMBERS
+CREATE TABLE IF NOT EXISTS room_members (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   room_id UUID REFERENCES rooms(id) ON DELETE CASCADE,
   user_id UUID REFERENCES users(id) ON DELETE CASCADE,
   joined_at TIMESTAMPTZ DEFAULT NOW(),
-  UNIQUE(room_id, user_id)
+  UNIQUE (room_id, user_id)
 );
 
--- Progress table
-CREATE TABLE progress (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+-- PROGRESS
+CREATE TABLE IF NOT EXISTS progress (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID REFERENCES users(id) ON DELETE CASCADE,
   problem_slug TEXT NOT NULL,
   solved_at TIMESTAMPTZ DEFAULT NOW(),
   source TEXT CHECK (source IN ('leetcode-daily', 'custom')),
   room_id UUID REFERENCES rooms(id) ON DELETE SET NULL,
-  
-  -- Prevent duplicate entries for same user/problem/room
-  UNIQUE(user_id, problem_slug, room_id)
+  UNIQUE (user_id, problem_slug, room_id)
 );
+/*
+-- Enable RLS where you want policies to apply
+ALTER TABLE users         ENABLE ROW LEVEL SECURITY;
+ALTER TABLE rooms         ENABLE ROW LEVEL SECURITY;
+ALTER TABLE room_members  ENABLE ROW LEVEL SECURITY;
+ALTER TABLE progress      ENABLE ROW LEVEL SECURITY;
 
 
--- Users can read their own data
+-- Users can read/update own profile
+DROP POLICY IF EXISTS "Users can view own profile"   ON users;
+DROP POLICY IF EXISTS "Users can update own profile" ON users;
+
 CREATE POLICY "Users can view own profile"
   ON users FOR SELECT
   USING (auth.uid() = id);
 
--- Users can update their own data
 CREATE POLICY "Users can update own profile"
   ON users FOR UPDATE
   USING (auth.uid() = id);
 
--- Users can view rooms they're members of
+-- Rooms: view only if member; create/update if creator
+DROP POLICY IF EXISTS "Users can view joined rooms"   ON rooms;
+DROP POLICY IF EXISTS "Users can create rooms"        ON rooms;
+DROP POLICY IF EXISTS "Room creators can update rooms" ON rooms;
+
 CREATE POLICY "Users can view joined rooms"
   ON rooms FOR SELECT
   USING (
-    id IN (
-      SELECT room_id FROM room_members WHERE user_id = auth.uid()
-    )
+    id IN (SELECT room_id FROM room_members WHERE user_id = auth.uid())
   );
-  -- Users can create rooms
+
 CREATE POLICY "Users can create rooms"
   ON rooms FOR INSERT
   WITH CHECK (auth.uid() = created_by);
 
--- Room creators can update their rooms
 CREATE POLICY "Room creators can update rooms"
   ON rooms FOR UPDATE
   USING (auth.uid() = created_by);
 
--- Users can view room members for rooms they're in
+-- Room members: view/insert/delete scoped to self
+DROP POLICY IF EXISTS "Users can view room members" ON room_members;
+DROP POLICY IF EXISTS "Users can join rooms"        ON room_members;
+DROP POLICY IF EXISTS "Users can leave rooms"       ON room_members;
+
 CREATE POLICY "Users can view room members"
   ON room_members FOR SELECT
   USING (
@@ -74,22 +89,23 @@ CREATE POLICY "Users can view room members"
     )
   );
 
--- Users can join rooms
 CREATE POLICY "Users can join rooms"
   ON room_members FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
--- Users can leave rooms
 CREATE POLICY "Users can leave rooms"
   ON room_members FOR DELETE
   USING (auth.uid() = user_id);
 
--- Users can view their own progress
+-- Progress: view/insert own
+DROP POLICY IF EXISTS "Users can view own progress"  ON progress;
+DROP POLICY IF EXISTS "Users can insert own progress" ON progress;
+
 CREATE POLICY "Users can view own progress"
   ON progress FOR SELECT
   USING (auth.uid() = user_id);
 
--- Users can insert their own progress
 CREATE POLICY "Users can insert own progress"
   ON progress FOR INSERT
   WITH CHECK (auth.uid() = user_id);
+  */
