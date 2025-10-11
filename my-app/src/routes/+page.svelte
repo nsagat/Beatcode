@@ -1,59 +1,37 @@
 <script>
-	import Counter from './Counter.svelte';
-	import welcome from '$lib/images/svelte-welcome.webp';
-	import welcomeFallback from '$lib/images/svelte-welcome.png';
+  const goToLogin = () => {
+    // Redirect to login page
+    window.location.href = "/login";
+  };
+
+  const goToRegister = () => {
+    // Redirect to registration / Google OAuth
+    window.location.href = "/register";
+  };
 </script>
 
-<svelte:head>
-	<title>Home</title>
-	<meta name="description" content="Svelte demo app" />
-</svelte:head>
+<div class="min-h-screen bg-indigo-50 flex flex-col items-center justify-center px-4 text-center">
+  <!-- App Name / Hero -->
+  <h1 class="text-5xl font-bold text-indigo-600 mb-4">🧠 LeetSync</h1>
+  <p class="text-gray-700 mb-12 max-w-md">
+    Track your LeetCode progress with friends. Stay consistent, solve daily challenges, and level up together.
+  </p>
 
-<section>
-	<h1>
-		<span class="welcome">
-			<picture>
-				<source srcset={welcome} type="image/webp" />
-				<img src={welcomeFallback} alt="Welcome" />
-			</picture>
-		</span>
+  <!-- Call-to-Action Buttons -->
+  <div class="flex flex-col md:flex-row gap-6">
+    <button
+      on:click={goToLogin}
+      class="px-8 py-4 bg-indigo-600 text-white rounded-lg text-lg font-semibold hover:bg-indigo-700 transition"
+    >
+      Log In
+    </button>
 
-		to your new<br />SvelteKit app
-	</h1>
+    <button
+      on:click={goToRegister}
+      class="px-8 py-4 border border-indigo-600 text-indigo-600 rounded-lg text-lg font-semibold hover:bg-indigo-100 transition"
+    >
+      Create Account
+    </button>
+  </div>
 
-	<h2>
-		try editing <strong>src/routes/+page.svelte</strong>
-	</h2>
-
-	<Counter />
-</section>
-
-<style>
-	section {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		flex: 0.6;
-	}
-
-	h1 {
-		width: 100%;
-	}
-
-	.welcome {
-		display: block;
-		position: relative;
-		width: 100%;
-		height: 0;
-		padding: 0 0 calc(100% * 495 / 2048) 0;
-	}
-
-	.welcome img {
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		top: 0;
-		display: block;
-	}
-</style>
+</div>
