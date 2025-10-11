@@ -1,4 +1,5 @@
 <script>
+  
   let username = "";
   let password = "";
 
@@ -7,6 +8,7 @@
     // For now, just log values
     console.log("Logging in with:", { username, password });
     // TODO: Add actual auth logic with API call
+
   };
 </script>
 
