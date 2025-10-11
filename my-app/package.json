@@ -51,7 +51,10 @@
 		"vitest-browser-svelte": "^1.1.0"
 	},
 	"dependencies": {
+		"@supabase/supabase-js": "^2.75.0",
 		"add": "^2.0.6",
+		"dotenv": "^17.2.3",
+		"pg": "^8.16.3",
 		"sv": "^0.9.7"
 	}
 }
