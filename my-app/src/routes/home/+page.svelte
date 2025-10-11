@@ -1,6 +1,7 @@
 <script>
 
   export let data;
+  console.log(data);
   
   let rooms = [
     { name: "AlgoCrushers", members: 5 },

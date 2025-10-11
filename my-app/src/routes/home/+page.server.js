@@ -47,5 +47,5 @@ async function getUsername(userId) {
   // return user?.leetcodeUsername;
 
   // Placeholder
-  return '';
+  return 'OliveraLotus';
 }
