@@ -1,11 +1,31 @@
 import { supabase } from '$lib/supabaseClient';
 
 // Sign up a new user
-async function signUp(email, password) {
-  const { data, error } = await supabase.auth.signUp({ email, password })
-  if (error) return console.error('Signup error:', error.message)
-  console.log('User signed up:', data.user)
+async function signUp(email, password, leetcodeID) {
+  const { data: signupData , error: signupErr } = await supabase.auth.signUp({ email, password })
+  if (signupErr) return console.error('Signup error:', signupErr.message)
+  console.log('User signed up:', signupData.user)
+
+  //Sign in The User
+  const { data: session_data, error: signinErr } = await supabase.auth.signInWithPassword({ email, password })
+  if (signinErr) return console.error('Signup error:', signinErr.message)
+  console.log('User logged in:', session_data.user)
+
+  //leetcodeID
+  const {data: userdata, error: insertError} = await supabase
+    .from('userdata')
+    .insert([{ id: session_data.user.id, LeetcodeID: leetcodeID }])
+    .select()
+    if (insertError) return console.error('Error inserting user data:', insertError.message)
+        console.log('User data inserted:', userdata)
+
+  //Sign Out a User
+  const { error: signoutErr } = await supabase.auth.signOut();
+  if (signoutErr)  return console.error('Signout error:', signoutErr.message)   
+
 }
+
+
 
 // Sign in an existing user
 async function signIn(email, password,LeetcodeID) {
@@ -24,7 +44,9 @@ async function signIn(email, password,LeetcodeID) {
 }
 
 //signUp('nilufersagat35@gmail.com','abc123');
-signIn('nilufersagat35@gmail.com','abc123','OliveraLotus');
+//signIn('nilufersagat35@gmail.com','abc123','OliveraLotus');
+//signIn('albertfelix@','abc123','OliveraLotus');
+
 
 //const { data, error } = await supabase.auth.admin.deleteUser('1c727c38-8db8-49ec-a2b9-75c37ff04e9d');
 //console.log('data', data, 'error', error);
