@@ -5,6 +5,7 @@
   /** @type {import('./$types').PageData} */
   export let data;
 
+  console.log()
   //join room modal state
   let isJoinModalOpen = false;
   let joinRoomCode = '';
@@ -168,7 +169,7 @@
         </div>
         <div class="flex items-center gap-2">
           <span class="font-medium text-gray-800">Solutions Completed:</span>
-          <span class="text-gray-600">{data.userProfile.profile.solutionCount}</span>
+          <span class="text-gray-600">{data.userProfile.submitStats.acSubmissionNum[0].count}</span>
         </div>
         <div class="flex items-center gap-2">
           <span class="font-medium text-gray-800">Ranking:</span>
