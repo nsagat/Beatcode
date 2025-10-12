@@ -26,8 +26,8 @@ export async function handle({ event, resolve }) {
 
   // Fetch session once per request
   if (!event.locals.session) {
-    const { data: { session } } = await supabase.auth.getSession();
-    event.locals.session = session || null;
+    const { data: { user } } = await supabase.auth.getUser();
+    event.locals.user = user || null;
   }
 
   // Resolve the request
