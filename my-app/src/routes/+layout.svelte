@@ -1,28 +1,24 @@
 <script>
-	import '../app.css';
-	import { createBrowserClient } from '@supabase/ssr';
-	import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public';
+  import '../app.css';
+  import { createBrowserClient } from '@supabase/ssr';
+  import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public';
 
-export const load = async ({ data, depends }) => {
-  depends('supabase:auth');
+  // Props coming from +layout.server.js
+  export let data;
+  const { session } = data;
 
+  // Create browser client (no immediate getSession)
   const supabase = createBrowserClient(
     PUBLIC_SUPABASE_URL,
     PUBLIC_SUPABASE_ANON_KEY
   );
 
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-
-  return { supabase, session };
-};
-	
-	/** @type {{children: import('svelte').Snippet}} */
-	let { children } = $props();
+  // Optionally sync auth state
+  supabase.auth.onAuthStateChange((_event, newSession) => {
+    // You can update a store or rerun load functions here
+  });
 </script>
 
-	<main>
-		{@render children()}
-	</main>
-
+<main>
+  <slot />
+</main>

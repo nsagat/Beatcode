@@ -3,29 +3,33 @@ import { createServerClient } from '@supabase/ssr';
 import { PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY } from '$env/static/public';
 
 export async function handle({ event, resolve }) {
-  event.locals.supabase = createServerClient(
-    PUBLIC_SUPABASE_URL,
-    PUBLIC_SUPABASE_ANON_KEY,
-    {
-      cookies: {
-        get: (key) => event.cookies.get(key),
-        set: (key, value, options) => {
-          event.cookies.set(key, value, { 
-            ...options, 
+  // Create Supabase client
+  const supabase = createServerClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY, {
+    cookies: {
+      get: (key) => event.cookies.get(key),
+      set: (key, value, options) => {
+        // Only set cookies once per request
+        if (!event.locals._cookieSet) {
+          event.cookies.set(key, value, {
+            ...options,
             path: '/',
-            secure: process.env.NODE_ENV === 'production'
+            secure: process.env.NODE_ENV === 'production',
           });
-        },
-        remove: (key, options) => {
-          event.cookies.delete(key, { ...options, path: '/' });
-        },
+          event.locals._cookieSet = true;
+        }
       },
-    }
-  );
-
-  return resolve(event, {
-    filterSerializedResponseHeaders(name) {
-      return name === 'content-range';
+      remove: (key, options) => event.cookies.delete(key, { ...options, path: '/' }),
     },
   });
+
+  event.locals.supabase = supabase;
+
+  // Fetch session once per request
+  if (!event.locals.session) {
+    const { data: { session } } = await supabase.auth.getSession();
+    event.locals.session = session || null;
+  }
+
+  // Resolve the request
+  return await resolve(event);
 }
