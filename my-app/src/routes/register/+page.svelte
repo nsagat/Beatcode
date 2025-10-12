@@ -1,26 +1,29 @@
 <script>
+  import { signUp } from "$lib/auth";
+  import { goto } from '$app/navigation'; 
+  
   let username = "";
   let email = "";
   let password = "";
   let confirmPassword = "";
 
-  const handleRegister = (e) => {
-    e.preventDefault();
+async function handleRegister(e) {
+  e.preventDefault();
 
-    if (password !== confirmPassword) {
-      alert("Passwords do not match!");
-      return;
-    }
+  if (password !== confirmPassword) {
+    alert("Passwords do not match!");
+    return;
+  }
 
-    // For now, just log values
-    console.log("Registering with:", { username, email, password });
-    // TODO: Replace with actual registration API call
-  };
-
-  const handleGoogleRegister = () => {
-    // TODO: Redirect to Google OAuth
-    console.log("Redirecting to Google OAuth...");
-  };
+  try {
+    const { user } = await signUp(email, password, username);
+    goto('/login'); 
+  } catch (err) {
+    const error = err.message;
+    console.error(error);
+  }    
+}
+  
 </script>
 
 <div class="min-h-screen flex items-center justify-center bg-gray-50 px-4">
@@ -31,13 +34,13 @@
     <form class="space-y-4" on:submit|preventDefault={handleRegister}>
       <!-- Username -->
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1" for="username">
-          Username
+        <label class="block text-sm font-medium text-gray-700 mb-1" for="email">
+          Email
         </label>
         <input
-          id="username"
-          type="text"
-          bind:value={username}
+          id="email"
+          type="email"
+          bind:value={email}
           placeholder="yourusername"
           class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
           required
@@ -46,13 +49,12 @@
 
       <!-- Leetcode Id -->
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1" for="leetcode id">
+        <label class="block text-sm font-medium text-gray-700 mb-1" for="username">
           Leetcode username
         </label>
         <input
-          id="email"
-          type="email"
-          bind:value={email}
+          id="username"
+          bind:value={username}
           placeholder="LeetCode"
           class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
           required
