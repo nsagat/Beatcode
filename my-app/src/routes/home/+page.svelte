@@ -2,7 +2,9 @@
   import { goto } from '$app/navigation';
   import { signOut } from '$lib/auth.js';
   export let data;
-  
+  const username = data.username;
+  console.log(data);
+
   let rooms = [
     { name: "AlgoCrushers", members: 5 },
     { name: "NightCoders", members: 3 },
