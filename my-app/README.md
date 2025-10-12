@@ -1,38 +1,52 @@
-# sv
+# BeatCode
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+**BeatCode** is a collaborative LeetCode progress tracker that allows users to create or join coding rooms, track daily challenges, and compete with friends via a leaderboard. It helps developers stay consistent, improve their algorithm skills, and gamify problem-solving.
 
-## Creating a project
+---
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Table of Contents
 
-```sh
-# create a new project in the current directory
-npx sv create
+- [Demo](#demo)  
+- [Features](#features)  
+- [Tech Stack](#tech-stack)  
+- [Setup](#setup)  
+- [Folder Structure](#folder-structure)  
+- [Usage](#usage)  
+- [Contributing](#contributing)  
+- [License](#license)  
 
-# create a new project in my-app
-npx sv create my-app
-```
+---
 
-## Developing
+## Demo
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+You can view a live demo at:  
+`https://your-deployed-app.vercel.app` *(replace with your URL)*
 
-```sh
-npm run dev
+---
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+## Features
 
-## Building
+- **Room System:** Create or join rooms to track coding progress with friends.  
+- **LeetCode Integration:** Fetch user stats using the [LeetCode API](https://leetcode-api-pied.vercel.app/).  
+- **Leaderboard:** Compare solved problems among room members.  
+- **Daily Challenge:** See today’s global coding problem.  
+- **Responsive Design:** Mobile-friendly dashboard built with Tailwind CSS.  
 
-To create a production version of your app:
+---
 
-```sh
-npm run build
-```
+## Tech Stack
 
-You can preview the production build with `npm run preview`.
+- **Frontend:** [SvelteKit](https://kit.svelte.dev/)  
+- **Styling:** [Tailwind CSS](https://tailwindcss.com/)  
+- **API Integration:** [LeetCode API](https://leetcode-api-pied.vercel.app/)  
+- **Hosting:** [Vercel](https://vercel.com/)  
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+---
+
+## Setup
+
+1. **Clone the repository**
+
+```bash
+git clone https://github.com/yourusername/beatcode.git
+cd beatcode
