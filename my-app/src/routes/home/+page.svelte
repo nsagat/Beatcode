@@ -2,7 +2,6 @@
   import { goto } from '$app/navigation';
   import { signOut } from '$lib/auth.js';
   export let data;
-  const username = data.username;
   //console.log(data);
 
   let rooms = [
@@ -10,12 +9,11 @@
     { name: "NightCoders", members: 3 },
   ];
 
-  let roomCode = '1';
+  let roomCode = '2';
   
   function joinRoom() {
-    if (roomCode.trim()) {
-      goto(`/room/${roomCode.trim().toUpperCase()}`);
-    }
+      console.log("xd");
+      goto(`/room/${roomCode}`);
   }  
 
   async function handleLogout() {
