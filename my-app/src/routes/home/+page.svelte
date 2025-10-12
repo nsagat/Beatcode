@@ -1,8 +1,9 @@
 <script>
   import { goto } from '$app/navigation';
   export let data;
+  const username = data.username;
   console.log(data);
-  
+
   let rooms = [
     { name: "AlgoCrushers", members: 5 },
     { name: "NightCoders", members: 3 },

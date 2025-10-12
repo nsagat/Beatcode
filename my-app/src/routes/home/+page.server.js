@@ -1,5 +1,6 @@
 // src/routes/+page.server.js
-
+//import { supabase } from '$lib/supabaseClient';
+import { LegacyESLint } from 'eslint/use-at-your-own-risk';
 const API_BASE = 'https://leetcode-api-pied.vercel.app';
 
 /** @type {import('./$types').PageServerLoad} */
@@ -37,15 +38,20 @@ export async function load({ fetch, locals }) {
  * Get username from database
  * Replace this with your actual database query
  */
-async function getUsername(userId) {
-  // TODO: Replace with actual database call
-  // Example with Prisma:
-  // const user = await prisma.user.findUnique({
-  //   where: { id: userId },
-  //   select: { leetcodeUsername: true }
-  // });
-  // return user?.leetcodeUsername;
+//The session contains an access token (signed JWT), a refresh token and the user object.
 
-  // Placeholder
-  return 'OliveraLotus';
+async function getUsername(locals, userId) {
+  if(!userId){
+    const supa = locals.supabase;
+    if(!supa){
+      console.error('Supabase client not found in locals');
+      return null;
+    } 
+    const {data, error} = await supa.from('userdata').select('LeetcodeID').eq('id', locals.user.id).single();
+    if (error) {
+      console.error('Error fetching username from database:', error.message);
+      return null;
+    }
+    return data?.LeetcodeID;
+  }
 }
