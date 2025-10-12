@@ -1,12 +1,11 @@
 <script>
   import { goto } from '$app/navigation';
   import { onMount } from 'svelte';
-  import { supabase } from '$lib/supabaseClient'; // Make sure this path is correct for your project
-
+  import { supabase } from '$lib/supabaseClient';
   /** @type {import('./$types').PageData} */
   export let data;
 
-  // State for the "Join Room" modal
+  //join room modal state
   let isJoinModalOpen = false;
   let joinRoomCode = '';
   let joinErrorMessage = '';
@@ -22,7 +21,7 @@
     isJoinModalOpen = false;
   }
 
-  // Handles the form submission inside the modal
+  //another page to hadnle joining the room
   async function handleJoinRoom() {
     if (!joinRoomCode.trim()) {
       joinErrorMessage = 'Please enter a room code.';
@@ -33,7 +32,7 @@
     const upperCaseCode = joinRoomCode.trim().toUpperCase();
 
     try {
-      // Check if a room with the given code exists
+      //if the room exists navigfae 
       const { data, error } = await supabase
         .from('rooms')
         .select('code')
@@ -43,10 +42,7 @@
       if (error || !data) {
         throw new Error('Room not found. Please check the code and try again.');
       }
-      
-      // If the room exists, navigate to it
       goto(`/room/${data.code}`);
-
     } catch (err) {
       joinErrorMessage = err.message;
     } finally {
@@ -64,7 +60,7 @@
   }
 </script>
 
-<!-- Join Room Modal -->
+<!--joining room-->
 {#if isJoinModalOpen}
   <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50" on:click|self={closeJoinModal}>
     <div class="bg-white rounded-xl shadow-2xl p-8 w-full max-w-md">
@@ -109,12 +105,11 @@
   </header>
 
   <main class="w-full max-w-3xl space-y-8">
-    <!-- Quick Actions -->
+    <!--quick actions-->
     <div class="flex justify-center gap-4">
-      <button on:click={() => goto('/create-room')} class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-white hover:text-indigo-600 border border-indigo-600">
+      <button on:click={() => goto('/create')} class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-white hover:text-indigo-600 border border-indigo-600">
         Create Room
       </button>
-      <!-- This button now opens the modal -->
       <button on:click={openJoinModal} class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-white hover:text-indigo-600 border border-indigo-600">
         Join Room
       </button>
@@ -123,7 +118,7 @@
       </button>
     </div>
 
-    <!-- Your Rooms -->
+    <!--your rooms-->
     <div class="bg-white rounded-lg shadow-md overflow-hidden">
       <div class="p-4 border-b">
         <h2 class="text-lg font-semibold">Your Rooms</h2>
@@ -143,7 +138,6 @@
       </div>
     </div>
 
-    <!-- Daily Challenge -->
     {#if data.dailyChallenge?.question}
     <div class="bg-white rounded-lg shadow-md overflow-hidden">
       <div class="p-4 border-b">
@@ -161,7 +155,7 @@
     </div>
     {/if}
 
-    <!-- Leaderboard Highlights -->
+    <!--leaderboard-->
     {#if data.userProfile?.profile}
     <div class="bg-white rounded-lg shadow-md overflow-hidden">
       <div class="p-4 border-b">

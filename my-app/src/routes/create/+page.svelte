@@ -102,9 +102,9 @@
         {/if}
       </button>
     </form>
-
+        <!--back to dashboard button-->
     <button
-      on:click={() => goto('/')}
+      on:click={() => goto('/home')}
       class="w-full bg-gray-200 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-300 transition-all duration-300 font-semibold"
       disabled={isLoading}
     >
