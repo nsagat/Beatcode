@@ -20,7 +20,7 @@
 ## Demo
 
 You can view a live demo at:  
-`https://your-deployed-app.vercel.app` *(replace with your URL)*
+👉 [https://leetsync.vercel.app](https://leetsync.vercel.app)
 
 ---
 
