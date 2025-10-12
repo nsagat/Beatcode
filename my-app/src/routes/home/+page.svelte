@@ -15,6 +15,10 @@
       console.log("xd");
       goto(`/room/${roomCode}`);
   }  
+  function createRoom() {
+      console.log("roomCreatepressed");
+      goto('/create');
+  }  
 
   async function handleLogout() {
     try {
@@ -28,7 +32,6 @@
 
 <div class="min-h-screen bg-gray-50 flex flex-col items-center py-10 px-4">
 
-  <!-- Header with Sign Out -->
   <header class="w-full max-w-3xl mb-8 flex justify-between items-center px-4">
     <div class="text-center flex-1">
       <h1 class="text-4xl font-bold text-indigo-600">🧠 BeatCode</h1>
@@ -39,9 +42,8 @@
 
   <main class="w-full max-w-3xl space-y-8">
 
-    <!-- Quick Actions -->
 <div class="flex justify-center gap-4">
-  <button class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-white hover:text-indigo-600 border border-indigo-600">
+  <button onclick={createRoom} class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-white hover:text-indigo-600 border border-indigo-600">
     Create Room
   </button>
   <button onclick={joinRoom} class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-white hover:text-indigo-600 border border-indigo-600">
@@ -51,7 +53,6 @@
     Sign Out
   </button>
 </div>
-    <!-- Your Rooms -->
     <div class="bg-white rounded-lg shadow-md overflow-hidden">
       <div class="p-4 border-b">
         <h2 class="text-lg font-semibold">Your Rooms</h2>
@@ -66,9 +67,7 @@
         {/each}
       </div>
     </div>
-
-    <!-- Daily Challenge -->
-    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+    <div class="bg-white rounded-lg shadow-md overflow-hidden"> 
       <div class="p-4 border-b">
         <h2 class="text-lg font-semibold">🔥 Today’s Global Challenge</h2>
       </div>
@@ -82,27 +81,19 @@
         </a>
       </div>
     </div>
-
-    <!-- Leaderboard Highlights -->
     <div class="bg-white rounded-lg shadow-md overflow-hidden">
       <div class="p-4 border-b">
         <h2 class="text-lg font-semibold">🏆 Your Highlights</h2>
       </div>
       <div class="p-4 space-y-3">
-
-        <!-- Username -->
         <div class="flex items-center gap-2">
           <span class="font-medium text-gray-800">Username:</span>
           <span class="text-gray-600">{data.userProfile.username}</span>
         </div>
-
-        <!-- Total Solutions -->
         <div class="flex items-center gap-2">
           <span class="font-medium text-gray-800">Solutions Completed:</span>
           <span class="text-gray-600">{data.userProfile.profile.solutionCount}</span>
         </div>
-
-        <!-- Optional: Add more stats -->
         <div class="flex items-center gap-2">
           <span class="font-medium text-gray-800">Ranking:</span>
           <span class="text-gray-600">{data.userProfile.profile.ranking || 'N/A'}</span>

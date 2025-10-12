@@ -14,7 +14,7 @@
     difficulty: "Easy",
     link: "https://leetcode.com/problems/two-sum/"
   };
-
+//now instead of hardcoding, fetch from supabase based on room code and backend code.
   let leaderboard = [
     { username: "you", solved: 102 },
     { username: "friend1", solved: 89 },
