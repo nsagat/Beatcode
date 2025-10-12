@@ -22,6 +22,8 @@ export async function signUp(email, password, leetcodeID) {
   //Sign Out a User
   const { error: signoutErr } = await supabase.auth.signOut();
   if (signoutErr)  return console.error('Signout error:', signoutErr.message)   
+
+  return signupData;
 }
 
 
