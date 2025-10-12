@@ -107,7 +107,7 @@
   <main class="w-full max-w-3xl space-y-8">
     <!--quick actions-->
     <div class="flex justify-center gap-4">
-      <button on:click={() => goto('/create-room')} class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-white hover:text-indigo-600 border border-indigo-600">
+      <button on:click={() => goto('/create')} class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-white hover:text-indigo-600 border border-indigo-600">
         Create Room
       </button>
       <button on:click={openJoinModal} class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-white hover:text-indigo-600 border border-indigo-600">
