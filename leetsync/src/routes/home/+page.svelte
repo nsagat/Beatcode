@@ -100,7 +100,7 @@
 <div class="min-h-screen bg-gray-50 flex flex-col items-center py-10 px-4">
   <header class="w-full max-w-3xl mb-8 flex justify-between items-center px-4">
     <div class="text-center flex-1">
-      <h1 class="text-4xl font-bold text-indigo-600">🧠 BeatCode</h1>
+      <h1 class="text-4xl font-bold text-indigo-600">🧠 LeetSync</h1>
       <p class="text-gray-600 mt-2">Track progress. Stay consistent. Grow together.</p>
     </div>
   </header>
