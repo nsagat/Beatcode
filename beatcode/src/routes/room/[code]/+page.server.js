@@ -33,13 +33,15 @@ export async function load({ params, locals, fetch }) {
   }
 
   //members and leetcode usernames
-  const { data: members } = await locals.supabase
-    .from('room_members')
-    .select('user_id, userdata:user_id(LeetcodeID)')
-    .eq('room_id', room.id);
 
-  const usernames = (members ?? [])
-    .map(m => m.userdata?.LeetcodeID)
+  const { data: members, error } = await locals.supabase
+  .from('room_members')
+  .select('LeetcodeID')
+  .eq('room_id', room.id); 
+
+
+    const usernames = (members ?? [])
+    .map(m => m.LeetcodeID)
     .filter(Boolean);
 
   const dailyChallenge = await fetch(`${API_BASE}/daily`).then(r => r.json());
