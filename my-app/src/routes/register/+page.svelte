@@ -1,26 +1,40 @@
 <script>
+  import { signUp } from "$lib/auth";
+  import { goto } from '$app/navigation';
+
   let username = "";
   let email = "";
   let password = "";
   let confirmPassword = "";
+  let errorMessage = "";
+  let loading = false;
 
-  const handleRegister = (e) => {
+  async function handleRegister(e) {
     e.preventDefault();
 
+    // Reset previous error
+    errorMessage = "";
+
     if (password !== confirmPassword) {
-      alert("Passwords do not match!");
+      errorMessage = "Passwords do not match!";
       return;
     }
 
-    // For now, just log values
-    console.log("Registering with:", { username, email, password });
-    // TODO: Replace with actual registration API call
-  };
-
-  const handleGoogleRegister = () => {
-    // TODO: Redirect to Google OAuth
-    console.log("Redirecting to Google OAuth...");
-  };
+    loading = true;
+    try {
+      const { user } = await signUp(email, password, username);
+      if (user) {
+        goto('/login');
+      } else {
+        errorMessage = "Registration failed. Please try again.";
+      }
+    } catch (err) {
+      errorMessage = err?.message || "An unknown error occurred.";
+      console.error(err);
+    } finally {
+      loading = false;
+    }
+  }
 </script>
 
 <div class="min-h-screen flex items-center justify-center bg-gray-50 px-4">
@@ -28,31 +42,30 @@
     <h1 class="text-3xl font-bold text-center text-indigo-600">🧠 LeetSync</h1>
     <p class="text-center text-gray-500">Create an account to track your coding progress</p>
 
+    {#if errorMessage}
+      <p class="text-red-600 text-center text-sm">{errorMessage}</p>
+    {/if}
+
     <form class="space-y-4" on:submit|preventDefault={handleRegister}>
-      <!-- Username -->
+      <!-- Email -->
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1" for="username">
-          Username
-        </label>
+        <label class="block text-sm font-medium text-gray-700 mb-1" for="email">Email</label>
         <input
-          id="username"
-          type="text"
-          bind:value={username}
-          placeholder="yourusername"
+          id="email"
+          type="email"
+          bind:value={email}
+          placeholder="you@example.com"
           class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
           required
         />
       </div>
 
-      <!-- Leetcode Id -->
+      <!-- LeetCode Username -->
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1" for="leetcode id">
-          Leetcode username
-        </label>
+        <label class="block text-sm font-medium text-gray-700 mb-1" for="username">Leetcode username</label>
         <input
-          id="email"
-          type="email"
-          bind:value={email}
+          id="username"
+          bind:value={username}
           placeholder="LeetCode"
           class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
           required
@@ -61,9 +74,7 @@
 
       <!-- Password -->
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1" for="password">
-          Password
-        </label>
+        <label class="block text-sm font-medium text-gray-700 mb-1" for="password">Password</label>
         <input
           id="password"
           type="password"
@@ -76,9 +87,7 @@
 
       <!-- Confirm Password -->
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1" for="confirmPassword">
-          Confirm Password
-        </label>
+        <label class="block text-sm font-medium text-gray-700 mb-1" for="confirmPassword">Confirm Password</label>
         <input
           id="confirmPassword"
           type="password"
@@ -92,12 +101,17 @@
       <!-- Register Button -->
       <button
         type="submit"
-        class="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition"
+        class="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition disabled:opacity-50"
+        disabled={loading}
       >
-        Register
+        {#if loading}
+          Registering...
+        {:else}
+          Register
+        {/if}
       </button>
     </form>
- 
+
     <p class="text-center text-gray-500 text-sm">
       Already have an account?
       <a href="/login" class="text-indigo-600 hover:underline">Log in</a>

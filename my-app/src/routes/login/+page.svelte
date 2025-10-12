@@ -1,15 +1,20 @@
 <script>
-  
+  import { signIn } from "$lib/auth" 
+  import { goto } from '$app/navigation'; 
+
   let username = "";
   let password = "";
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    // For now, just log values
-    console.log("Logging in with:", { username, password });
-    // TODO: Add actual auth logic with API call
-
+  async function handleLogin() {
+    try {
+      const { user } = await signIn(username, password);
+      console.log('Logged in as:', user);
+      goto('/home'); 
+    } catch (err) {
+      console.log(err);
+    }
   };
+
 </script>
 
 <div class="min-h-screen flex items-center justify-center bg-gray-50 px-4">
@@ -18,7 +23,6 @@
     <p class="text-center text-gray-500">Log in to track your coding progress</p>
 
     <form class="space-y-4" on:submit|preventDefault={handleLogin}>
-      <!-- Username / Email -->
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-1" for="username">
           Username
@@ -27,7 +31,7 @@
           id="username"
           type="text"
           bind:value={username}
-          placeholder="yourusername"
+          placeholder="youremail"
           class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
           required
         />
