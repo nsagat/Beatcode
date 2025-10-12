@@ -3,7 +3,7 @@
   import { signOut } from '$lib/auth.js';
   export let data;
   const username = data.username;
-  console.log(data);
+  //console.log(data);
 
   let rooms = [
     { name: "AlgoCrushers", members: 5 },

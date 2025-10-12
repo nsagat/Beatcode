@@ -1,18 +1,24 @@
-// src/routes/+page.server.js
-//import { supabase } from '$lib/supabaseClient';
-import { LegacyESLint } from 'eslint/use-at-your-own-risk';
+// src/routes/home/+page.server.js
 const API_BASE = 'https://leetcode-api-pied.vercel.app';
 
 /** @type {import('./$types').PageServerLoad} */
-export async function load({ fetch, locals }) {
-  // Step 1: Get username from your database
-  const username = await getUsername(locals.user?.id);
+export async function load({ locals, fetch }) {
+  const { data: { user }, error: userError } = await locals.supabase.auth.getUser();
   
-  if (!username) {
-    return { error: 'No LeetCode username found' };
+  console.log('User from locals:', user);
+  
+  if (userError || !user) {
+    return { 
+      error: 'Not authenticated',
+      userProfile: null,
+      userContests: null,
+      userSubmissions: null,
+      dailyChallenge: null
+    };
   }
 
-  // Step 2: Fetch all data from LeetCode API
+  const username = await getUsername(locals.supabase, user.id);
+  console.log(username);
   try {
     const [userProfile, userContests, userSubmissions, dailyChallenge] = 
       await Promise.all([
@@ -34,24 +40,18 @@ export async function load({ fetch, locals }) {
   }
 }
 
-/**
- * Get username from database
- * Replace this with your actual database query
- */
-//The session contains an access token (signed JWT), a refresh token and the user object.
 
-async function getUsername(locals, userId) {
-  if(!userId){
-    const supa = locals.supabase;
-    if(!supa){
-      console.error('Supabase client not found in locals');
-      return null;
-    } 
-    const {data, error} = await supa.from('userdata').select('LeetcodeID').eq('id', locals.user.id).single();
-    if (error) {
-      console.error('Error fetching username from database:', error.message);
-      return null;
-    }
-    return data?.LeetcodeID;
+async function getUsername(supabase, userId) {
+  const { data, error } = await supabase
+    .from('userdata')
+    .select('LeetcodeID')
+    .eq('id', userId)
+    .single();
+  
+  if (error) {
+    console.error('Error fetching username:', error);
+    return null;
   }
+  
+  return data?.LeetcodeID;
 }
