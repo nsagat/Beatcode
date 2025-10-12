@@ -56,10 +56,11 @@ export async function load({ params, locals, fetch }) {
     })
   );
 
+  console.log(profiles[0])
   const leaderboard = profiles
     .map(p => ({
       username: p.username,
-      solved: p.profile?.solutionCount ?? 0
+      solved:  p.raw?.submitStats?.acSubmissionNum[0]?.count ?? 0
     }))
     .sort((a, b) => b.solved - a.solved);
 
