@@ -41,12 +41,3 @@ You can view a live demo at:
 - **API Integration:** [LeetCode API](https://leetcode-api-pied.vercel.app/)  
 - **Hosting:** [Vercel](https://vercel.com/)  
 
----
-
-## Setup
-
-1. **Clone the repository**
-
-```bash
-git clone https://github.com/yourusername/beatcode.git
-cd beatcode
