@@ -1,7 +1,7 @@
 import { supabase } from '$lib/supabaseClient';
 
 // Sign up a new user
-async function signUp(email, password, leetcodeID) {
+export async function signUp(email, password, leetcodeID) {
   const { data: signupData , error: signupErr } = await supabase.auth.signUp({ email, password })
   if (signupErr) return console.error('Signup error:', signupErr.message)
   console.log('User signed up:', signupData.user)
@@ -27,7 +27,7 @@ async function signUp(email, password, leetcodeID) {
 
 
 // Sign in an existing user
-async function signIn(email, password) {
+export async function signIn(email, password) {
   const { data: session_data, error: error } = await supabase.auth.signInWithPassword({ email, password })
   if (error) return console.error('Login error:', error.message)
   console.log('User logged in:', session_data.user)
@@ -35,7 +35,7 @@ async function signIn(email, password) {
 }
 
 
-async function signOut() {
+export async function signOut() {
   const { error: signoutErr } = await supabase.auth.signOut();
   if (signoutErr)  return console.error('Signout error:', signoutErr.message)   
 }

@@ -1,15 +1,20 @@
 <script>
-  
+  import { signIn } from "$lib/auth" 
+  import { goto } from '$app/navigation'; 
+
   let username = "";
   let password = "";
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    // For now, just log values
-    console.log("Logging in with:", { username, password });
-    // TODO: Add actual auth logic with API call
-
+  async function handleLogin() {
+    try {
+      const { user } = await signIn(username, password);
+      console.log('Logged in as:', user);
+      goto('/home'); 
+    } catch (err) {
+      error = err.message;
+    }
   };
+
 </script>
 
 <div class="min-h-screen flex items-center justify-center bg-gray-50 px-4">

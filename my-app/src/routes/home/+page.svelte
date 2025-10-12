@@ -1,7 +1,7 @@
 <script>
   import { goto } from '$app/navigation';
+  import { signOut } from '$lib/auth.js'
   export let data;
-  console.log(data);
   
   let rooms = [
     { name: "AlgoCrushers", members: 5 },
@@ -16,7 +16,22 @@
     }
   }  
 
+  
+  async function handleLogout() {
+    try {
+      await signOut()
+      goto('/'); 
+    } catch (err) {
+      console.log(err.message);
+    }
+  }
+
+
 </script>
+
+<button onclick={handleLogout} >
+SignOut
+</button>
 
 <div class="min-h-screen bg-gray-50 flex flex-col items-center py-10 px-4">
   <header class="w-full max-w-3xl mb-8 text-center">
