@@ -25,7 +25,7 @@
     <form class="space-y-4" on:submit|preventDefault={handleLogin}>
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-1" for="username">
-          Username
+          Email
         </label>
         <input
           id="username"
